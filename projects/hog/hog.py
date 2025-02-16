@@ -2,7 +2,7 @@
 
 from dice import six_sided, make_test_dice
 from ucb import main, trace, interact
-from math import log2
+from math import log2, sqrt
 
 GOAL = 100  # The goal of Hog is to score 100 points.
 
@@ -92,6 +92,26 @@ def square_update(num_rolls, player_score, opponent_score, dice=six_sided):
 
 # BEGIN PROBLEM 4
 "*** YOUR CODE HERE ***"
+
+
+def perfect_square(score):
+    i = 0
+    while i <= score:
+        if i * i == score:
+            return True
+        i += 1
+    return False
+
+
+def next_perfect_square(score):
+    i = 0
+    while i <= score:
+        if i * i == score:
+            return (i + 1) * (i + 1)
+        i += 1
+    return False
+
+
 # END PROBLEM 4
 
 
@@ -130,6 +150,14 @@ def play(strategy0, strategy1, update, score0=0, score1=0, dice=six_sided, goal=
     who = 0  # Who is about to take a turn, 0 (first) or 1 (second)
     # BEGIN PROBLEM 5
     "*** YOUR CODE HERE ***"
+    while score0 < goal and score1 < goal:
+        if who == 0:
+            dice_num = strategy0(score0, score1)
+            score0 = update(dice_num, score0, score1, dice)
+        else:
+            dice_num = strategy1(score1, score0)
+            score1 = update(dice_num, score1, score0, dice)
+        who = 1 - who
     # END PROBLEM 5
     return score0, score1
 
