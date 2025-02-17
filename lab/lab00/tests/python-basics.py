@@ -12,7 +12,7 @@ test = {
           3.5
           >>> 7 // 2
           3
-          >>> 7 % 2			# 7 modulo 2, the remainder when dividing 7 by 2.
+          >>> 7 % 2  # 7 modulo 2, the remainder when dividing 7 by 2.
           1
           """,
           'hidden': False,
@@ -37,7 +37,7 @@ test = {
           >>> y * 2
           16
           >>> y = y // 4
-          >>> y + x
+          >>> y + x # think carefully about what x is equal to!
           22
           """,
           'hidden': False,
