@@ -241,12 +241,14 @@ def make_averaged(original_function, total_samples=1000):
     """
     # BEGIN PROBLEM 8
     "*** YOUR CODE HERE ***"
+
     def averaged_dice(*args):
-        sum=0.0
+        sum = 0.0
         for i in range(total_samples):
             cur = original_function(*args)
-            sum+=cur
-        return sum/total_samples
+            sum += cur
+        return sum / total_samples
+
     return averaged_dice
     # END PROBLEM 8
 
@@ -262,6 +264,20 @@ def max_scoring_num_rolls(dice=six_sided, total_samples=1000):
     """
     # BEGIN PROBLEM 9
     "*** YOUR CODE HERE ***"
+    # 先创建平均化的骰子掷骰器
+    averaged_dice = make_averaged(roll_dice, total_samples)
+
+    # 初始化最大得分和最佳掷骰次数
+    max_avg_score = 0
+    max_rolls = 1
+
+    for i in range(1, 11):
+        avg_score = averaged_dice(i, dice)  # 计算当前掷骰次数的平均得分
+        if avg_score > max_avg_score:  # 更新最大得分和掷骰次数
+            max_avg_score = avg_score
+            max_rolls = i
+
+    return max_rolls
     # END PROBLEM 9
 
 
@@ -305,14 +321,21 @@ def tail_strategy(score, opponent_score, threshold=12, num_rolls=6):
     points, and returns NUM_ROLLS otherwise. Ignore score and Square Swine.
     """
     # BEGIN PROBLEM 10
-    return num_rolls  # Remove this line once implemented.
+    # return num_rolls  # Remove this line once implemented.
+    if tail_points(opponent_score) >= threshold:
+        return 0
+    else:
+        return num_rolls
     # END PROBLEM 10
 
 
 def square_strategy(score, opponent_score, threshold=12, num_rolls=6):
     """This strategy returns 0 dice when your score would increase by at least threshold."""
     # BEGIN PROBLEM 11
-    return num_rolls  # Remove this line once implemented.
+    # return num_rolls  # Remove this line once implemented.
+    if square_update(0, score, opponent_score) - score > threshold:
+        return 0
+    return num_rolls
     # END PROBLEM 11
 
 
@@ -320,9 +343,26 @@ def final_strategy(score, opponent_score):
     """Write a brief description of your final strategy.
 
     *** YOUR DESCRIPTION HERE ***
+    if the current score is greater than 90 but less than 100, roll 0
+    if the difference between the score and opponent_score is less than 10, roll 6
+    if the difference is greater than 10, roll 8
+    if the difference is greater than 20, roll 10
+    square_strategy if the increase is greater than 10
+    tail_strategy if the increase is greater than 10
     """
     # BEGIN PROBLEM 12
-    return 6  # Remove this line once implemented.
+    # return 6  # Remove this line once implemented.
+    difference = opponent_score - score
+    if score >= 90 and score < 100:
+        return 0
+    elif tail_points(opponent_score) >= 12 or square_update(0, score, opponent_score) - score >= 15:
+        return 0
+    elif difference > 10 and difference <= 20:
+        return 7
+    elif difference > 20:
+        return 8
+    else:
+        return 6
     # END PROBLEM 12
 
 
